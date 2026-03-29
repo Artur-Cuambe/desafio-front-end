@@ -133,6 +133,15 @@
             >
               <Button
                 @click="startEditing(props.row)"
+                btnClass="btn-icon btn-outline-secondary btn-sm"
+                :text="t('Edit')"
+                :is-disabled="props.row.code == 'ADMIN'"
+              >
+                <Icon icon="heroicons:eye" />
+              </Button>
+
+              <Button
+                @click="startEditing(props.row)"
                 btnClass="btn-icon btn-outline-primary btn-sm"
                 :text="t('Edit')"
                 :is-disabled="props.row.code == 'ADMIN'"
