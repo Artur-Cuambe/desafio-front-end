@@ -308,7 +308,7 @@ export default {
 }
 .menu-item-active {
   .menu-link {
-    @apply bg-slate-800 dark:bg-slate-700;
+    @apply bg-primary-500 dark:bg-slate-700;
     .icon-box,
     .menu-icon,
     .text-box {
