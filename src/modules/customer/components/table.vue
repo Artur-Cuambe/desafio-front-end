@@ -149,6 +149,12 @@
                 <Icon icon="heroicons:trash" />
               </Button>
             </div>
+            <div
+              v-if="props.column.field === 'gender'"
+              class=""
+            >
+              {{ $t(props.row.gender) }}
+            </div>
 
             <!-- Checkbox na primeira coluna -->
             <div
@@ -277,7 +283,7 @@ const onRowClick = (params) => {
 
 const toggleRowSelection = (row) => {
   const index = selectedEntity.value.findIndex(
-    (selectedRow) => selectedRow.id === row.id
+    (selectedRow) => selectedRow.id === row.id,
   );
 
   if (index === -1) {
@@ -315,7 +321,7 @@ const handleDeleteSelected = () => {
   if (selectedEntity.value.length === 0) return;
 
   const confirmDelete = confirm(
-    `Deseja realmente excluir item(ns) selecionado(s)?`
+    `Deseja realmente excluir item(ns) selecionado(s)?`,
   );
 
   if (confirmDelete) {

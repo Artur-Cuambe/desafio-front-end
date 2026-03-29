@@ -37,14 +37,15 @@
                 prependIcon="heroicons-outline:document-text"
                 merged
               />
-              <InputGroup
-                v-model.trim="entityForm.gender"
-                :error="entityForm.phoneNumberError"
-                type="text"
-                :placeholder="$t('Genero')"
-                prependIcon="heroicons-outline:document-text"
-                merged
-              />
+
+              <vSelect
+                class="dark:text-black-500 dark:bg-black-300"
+                v-model="entityForm.gender"
+                :reduce="(per) => per.value"
+                :options="genderData"
+                :error="entityForm.genderError"
+              >
+              </vSelect>
 
               <InputGroup
                 hidden
@@ -90,6 +91,9 @@ import Button from "@/components/Button/index.vue";
 import { UseForm } from "../composables/useForm";
 import { UpdateCustomerDto } from "@/api";
 import { useCRUD } from "../composables/useCRUD";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+import { computed } from "vue";
 
 const { selectedEntity } = defineProps({ selectedEntity: Object });
 
@@ -105,6 +109,19 @@ const close = () => {
   emit("clearSelection");
   emit("close");
 };
+
+const gender = [
+  { label: "Masculino", value: "MALE" },
+  { label: "Feminino", value: "FEMALE" },
+];
+
+const genderData = computed(() => {
+  return gender?.map((item) => {
+    return {
+      ...item,
+    };
+  });
+});
 
 const onSubmit = handleSubmit(async () => {
   const data: UpdateCustomerDto = {

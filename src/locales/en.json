@@ -35,5 +35,12 @@
   "Select all": "Select all",
   "Deselect all": "Deselect all",
   "Selected": "Selected",
-  "Delete selected": "Delete selected"
+  "Delete selected": "Delete selected",
+  "list-order": "Pedidos",
+  "list-customer": "Clientes",
+  "PENDING": "Pendente",
+  "IN_PROGRESS": "Em trânsito",
+  "COMPLETED": "Entregue",
+  "MALE":"Masculino",
+  "FEMALE":"Feminino"
 }

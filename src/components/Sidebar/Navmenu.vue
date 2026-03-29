@@ -22,7 +22,7 @@
           <Icon :icon="item.icon"
         /></span>
         <div class="text-box flex-grow" v-if="item.title">
-          {{ item.title }}
+          {{  $t(item.title) }}
         </div>
         <span
           class="menu-badge"
@@ -33,7 +33,7 @@
 
       <!-- ?? only for menulabel ??  -->
       <div v-else-if="item.isHeadr && !item.child" class="menulabel">
-        {{ item.title }}
+        {{  $t(item.title) }}
       </div>
       <!-- !!sub menu parent li !! -->
       <div
@@ -48,7 +48,7 @@
           <span class="menu-icon" v-show="item.icon">
             <Icon :icon="item.icon"
           /></span>
-          <div class="text-box" v-if="item.title">{{ item.title }}</div>
+          <div class="text-box" v-if="item.title">{{ $t(item.title) }}</div>
         </div>
         <div class="flex-0">
           <div

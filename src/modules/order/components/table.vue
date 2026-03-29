@@ -149,6 +149,29 @@
                 <Icon icon="heroicons:trash" />
               </Button>
             </div>
+            <div
+              v-if="props.column.field === 'status'"
+              class="flex items-center gap-2"
+            >
+              <Badge
+                :label="t(props.row.status)"
+                :badgeClass="
+                  props.row.status == 'PENDING'
+                    ? 'bg-gray-500 text-white'
+                    : props.row.status == 'COMPLETED'
+                    ? 'bg-success-500 text-white'
+                    : 'bg-warning-500 text-white'
+                "
+              />
+              <Button
+                @click="startEditingStatus(props.row)"
+                btnClass="btn-icon btn-outline-primary btn-sm w-2"
+                :text="t('Edit')"
+                :is-disabled="props.row.code == 'ADMIN'"
+              >
+                <Icon icon="heroicons:" />
+              </Button>
+            </div>
 
             <!-- Checkbox na primeira coluna -->
             <div
@@ -183,6 +206,14 @@
       @clearSelection="clearSelection"
       :selectedEntity="selectedEntity[0]"
       @close="emit('close')"
+      v-if="props.isEditing && !openEditForm"
+    />
+    <statusForm
+      @refetch="emit('refetch')"
+      @clearSelection="clearSelection"
+      :selectedEntity="selectedEntity[0]"
+      @close="close"
+      :openEditForm="openEditForm"
       v-if="props.isEditing"
     />
   </div>
@@ -197,7 +228,9 @@ import { useI18n } from "vue-i18n";
 import TableSkeleton from "@/components/Skeleton/Table.vue";
 import addForm from "./addForm.vue";
 import editForm from "./editForm.vue";
+import statusForm from "./statusForm.vue";
 import { formateDatePT } from "@/utils/formatters";
+import Badge from "@/components/Badge";
 
 const props = defineProps({
   items: Array,
@@ -283,6 +316,10 @@ const onRowClick = (params) => {
     toggleRowSelection(params.row);
   }
 };
+const close = () => {
+  openEditForm.value = false;
+  emit("close");
+};
 
 const toggleRowSelection = (row) => {
   const index = selectedEntity.value.findIndex(
@@ -335,6 +372,11 @@ const handleDeleteSelected = () => {
 
 const startEditing = (row) => {
   selectedEntity.value[0] = row;
+  emit("startEditing", row);
+};
+const startEditingStatus = (row) => {
+  selectedEntity.value[0] = row;
+  openEditForm.value = true;
   emit("startEditing", row);
 };
 
