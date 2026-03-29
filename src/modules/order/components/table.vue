@@ -169,7 +169,7 @@
                 :text="t('Edit')"
                 :is-disabled="props.row.code == 'ADMIN'"
               >
-                <Icon icon="heroicons:" />
+                <Icon icon="heroicons:arrow-path" />
               </Button>
             </div>
 
