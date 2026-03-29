@@ -1,0 +1,39 @@
+.DS_Store
+node_modules
+/dist
+
+
+# local env files
+.env.local
+.env.*.local
+.env
+.yarn.lock
+
+
+dist.zip
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore specific temporary MD files
+API_COMPOSITION_PATTERN.md
+CLAUDE.md
+FIX_USER_UPDATE_400_ERROR.md
+IMPLEMENTATION_SUMMARY.md
+QUICK_START_API_COMPOSITION.md
+ROLE_MANAGEMENT_GUIDE.md
+USER_MANAGEMENT_CRUD_VERIFICATION.md
+
+# /*.md
