@@ -90,7 +90,7 @@
                 @click="onSubmit"
                 class="px-4 py-2 bg-primary-500 rounded-lg text-sm font-medium text-white"
               >
-                Update Status
+                Actualizar estado
               </button>
             </div>
           </div>

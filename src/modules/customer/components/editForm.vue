@@ -14,6 +14,7 @@
               <InputGroup
                 v-model.trim="entityForm.firstName"
                 :error="entityForm.firstNameError"
+                :disabled="viewForm"
                 type="text"
                 :placeholder="$t('Nome')"
                 prependIcon="heroicons-outline:office-building"
@@ -24,6 +25,7 @@
                 v-model.trim="entityForm.lastName"
                 :error="entityForm.lastNameError"
                 type="text"
+                :disabled="viewForm"
                 :placeholder="$t('Apelido')"
                 prependIcon="heroicons-outline:office-building"
                 merged
@@ -33,6 +35,7 @@
                 v-model.trim="entityForm.phoneNumber"
                 :error="entityForm.phoneNumberError"
                 type="text"
+                :disabled="viewForm"
                 :placeholder="$t('Telefone')"
                 prependIcon="heroicons-outline:document-text"
                 merged
@@ -43,6 +46,7 @@
                 v-model="entityForm.gender"
                 :reduce="(per) => per.value"
                 :options="genderData"
+                :disabled="viewForm"
                 :error="entityForm.genderError"
               >
               </vSelect>
@@ -66,6 +70,7 @@
                   {{ $t("cancel") }}
                 </Button>
                 <Button
+                  v-if="!viewForm"
                   text="dark"
                   btnClass="btn-primary"
                   type="submit"
@@ -95,7 +100,10 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { computed } from "vue";
 
-const { selectedEntity } = defineProps({ selectedEntity: Object });
+const { selectedEntity, viewForm } = defineProps({
+  selectedEntity: Object,
+  viewForm: Boolean,
+});
 
 const emit = defineEmits(["refetch", "close", "clearSelection"]);
 

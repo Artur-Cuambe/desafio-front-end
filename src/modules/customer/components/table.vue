@@ -23,7 +23,7 @@
             <Button btnClass="btn-primary btn-sm">
               <div class="flex items-center gap-2">
                 <Icon icon="heroicons-solid:plus" class="text-lg" />
-                <span style="text-transform: none">{{ t("new item") }}</span>
+                <span style="text-transform: none">Novo cliente</span>
               </div>
             </Button>
           </addForm>
@@ -75,13 +75,14 @@
           <input
             type="text"
             v-model="searchTerm"
-            placeholder="Search client..."
-            class="bg-white dark:bg-slate-700 text-gray-900 dark:text-white rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 border border-gray-300 dark:border-transparent"
+            placeholder="Procurar cliente..."
+            class="bg-white dark:bg-slate-700 text-gray-900 dark:text-white rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 border border-gray-300 dark:border-transparent"
             @input="emit('onSearch', searchTerm)"
           />
         </div>
 
         <!-- Tabela -->
+         <div class="mx-6">
         <vue-good-table
           ref="tableRef"
           :columns="columns"
@@ -132,9 +133,9 @@
               class="flex items-center gap-2"
             >
               <Button
-                @click="startEditing(props.row)"
+                @click="startEditing(props.row, true)"
                 btnClass="btn-icon btn-outline-secondary btn-sm"
-                :text="t('Edit')"
+                :text="t('View')"
                 :is-disabled="props.row.code == 'ADMIN'"
               >
                 <Icon icon="heroicons:eye" />
@@ -187,12 +188,14 @@
             </div>
           </template>
         </vue-good-table>
+        </div>
       </div>
     </Card>
     <editForm
       @refetch="emit('refetch')"
       @clearSelection="clearSelection"
       :selectedEntity="selectedEntity[0]"
+      :viewForm="viewForm"
       @close="emit('close')"
       v-if="props.isEditing"
     />
@@ -232,6 +235,7 @@ const { t } = useI18n();
 const tableRef = ref(null);
 const selectedEntity = ref([]);
 const isMobile = ref(false);
+const viewForm = ref(false);
 const openEditForm = ref(false);
 const perpage = ref(10);
 const searchTerm = ref("");
@@ -251,7 +255,7 @@ const columns = ref([
   },
 
   {
-    label: t("Genero"),
+    label: t("Gênero"),
     field: "gender",
   },
   {
@@ -260,7 +264,7 @@ const columns = ref([
     sortable: true,
   },
   {
-    label: t("actions"),
+    label: t("Acções"),
     field: "actions",
     sortable: false,
     width: "120px",
@@ -335,7 +339,8 @@ const handleDeleteSelected = () => {
   }
 };
 
-const startEditing = (row) => {
+const startEditing = (row, view = false) => {
+  viewForm.value = view;
   selectedEntity.value[0] = row;
   emit("startEditing", row);
 };

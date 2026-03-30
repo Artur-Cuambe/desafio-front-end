@@ -23,6 +23,7 @@
               :options="customerData"
               :error="entityForm.customerIdError"
               :filterable="false"
+              :placeholder="$t('Selecionar cliente')"
               @search="onSearchCustomer"
             >
             </vSelect>
@@ -40,7 +41,7 @@
               v-model.trim="entityForm.deliveryAddress"
               :error="entityForm.deliveryAddressError"
               type="text"
-              :placeholder="$t('Insert address')"
+              :placeholder="$t('Inserir endereço')"
               prependIcon="heroicons-outline:document-text"
               merged
             />
@@ -48,7 +49,7 @@
             <Textarea
               v-model.trim="entityForm.deliveryNotes"
               :error="entityForm.deliveryNotesError"
-              :placeholder="$t('Insert description')"
+              :placeholder="$t('Inserir descrição')"
               prependIcon="heroicons-outline:document-text"
               merged
             />
@@ -68,6 +69,7 @@
               v-model="entityForm.status"
               :reduce="(per) => per.value"
               :options="statusData"
+              :placeholder="$t('Selecionar estado')"
               :error="entityForm.statusError"
             >
             </vSelect>

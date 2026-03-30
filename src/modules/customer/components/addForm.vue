@@ -47,6 +47,7 @@
               v-model="entityForm.gender"
               :reduce="(per) => per.value"
               :options="genderData"
+              placeholder="Selecionar gênero "
               :error="entityForm.genderError"
             >
             </vSelect>

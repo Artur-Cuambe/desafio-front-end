@@ -3,7 +3,7 @@
     <DialogModal>
       <template #title>
         <div class="px-6 pt-6 bg-white dark:bg-slate-800 rounded-lg">
-          {{ $t("Pedido") }}
+          {{ $t("Pedido") }}  {{ viewForm }}
         </div></template
       >
       <template #body>
@@ -17,6 +17,7 @@
                 :reduce="(per) => per.value"
                 :options="customerData"
                 :error="entityForm.customerIdError"
+                :disabled="viewForm"
                 :filterable="false"
                 @search="onSearchCustomer"
               >
@@ -26,6 +27,7 @@
                 v-model.trim="entityForm.deliveryAddress"
                 :error="entityForm.deliveryAddressError"
                 type="text"
+                 :disabled="viewForm"
                 :placeholder="$t('Insert address')"
                 prependIcon="heroicons-outline:document-text"
                 merged
@@ -34,6 +36,7 @@
               <Textarea
                 v-model.trim="entityForm.deliveryNotes"
                 :error="entityForm.deliveryNotesError"
+                 :disabled="viewForm"
                 :placeholder="$t('Insert description')"
                 prependIcon="heroicons-outline:document-text"
                 merged
@@ -44,6 +47,7 @@
                 v-model.number="entityForm.entityId"
                 :error="entityForm.entityIdError"
                 type="number"
+                 :disabled="viewForm"
                 :placeholder="$t('Insert entity')"
                 prependIcon="heroicons-outline:document-text"
                 merged
@@ -53,6 +57,7 @@
                 v-model="entityForm.status"
                 :reduce="(per) => per.value"
                 :options="statusData"
+                 :disabled="viewForm"
                 :error="entityForm.statusError"
               >
               </vSelect>
@@ -67,6 +72,7 @@
                   {{ $t("cancel") }}
                 </Button>
                 <Button
+                v-if="!viewForm"
                   text="dark"
                   btnClass="btn-primary"
                   type="submit"
@@ -97,7 +103,10 @@ import { useGetAllQuery } from "@/modules/customer/composables/useGetAllQuery";
 import Textarea from "@/components/Textarea/index.vue";
 import "vue-select/dist/vue-select.css";
 
-const { selectedEntity } = defineProps({ selectedEntity: Object });
+const { selectedEntity,viewForm } = defineProps({
+  selectedEntity: Object,
+  viewForm: Boolean,
+});
 
 const emit = defineEmits(["refetch", "close", "clearSelection"]);
 
