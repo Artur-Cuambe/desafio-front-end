@@ -23,7 +23,7 @@
             <Button btnClass="btn-primary btn-sm">
               <div class="flex items-center gap-2">
                 <Icon icon="heroicons-solid:plus" class="text-lg" />
-                <span style="text-transform: none">{{ t("new item") }}</span>
+                <span style="text-transform: none">Novo pedido</span>
               </div>
             </Button>
           </addForm>
@@ -75,107 +75,141 @@
           <input
             type="text"
             v-model="searchTerm"
-            placeholder="Search order..."
-            class="bg-white dark:bg-slate-700 text-gray-900 dark:text-white rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 border border-gray-300 dark:border-transparent"
+            placeholder="Procurar pedido..."
+            class="bg-white dark:bg-slate-700 text-gray-900 dark:text-white rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 border border-gray-300 dark:border-transparent"
             @input="emit('onSearch', searchTerm)"
           />
         </div>
 
         <!-- Tabela -->
-        <vue-good-table
-          ref="tableRef"
-          :columns="columns"
-          :rows="items"
-          v-model:selected-rows="selectedEntity"
-          styleClass="vgt-table centered lesspadding2 table-head"
-          :pagination-options="{
-            enabled: true,
-            perPage: perpage,
-            perPageDropdown: [10, 20, 50, 100],
-          }"
-          :sort-options="{
-            enabled: true,
-          }"
-          :select-options="{
-            enabled: false,
-            selectOnCheckboxOnly: false, // Permite clicar na linha também
-            selectionInfoClass: 'hidden', // Oculta o painel padrão
-            selectionText: t('rows selected'),
-            clearSelectionText: t('clear'),
-            disableSelectInfo: true, // Desabilita o painel padrão
-            selectAllByGroup: false,
-          }"
-          mode="remote"
-          @on-selected-rows-change="onSelectionChange"
-          @on-row-click="onRowClick"
-        >
-          <!-- Coluna de checkbox -->
-          <template #table-column="props">
-            <span v-if="props.column.field === 'checkbox'">
-              <input
-                v-show="0"
-                type="checkbox"
-                :checked="isAllSelected"
-                @change="toggleSelectAll"
-                class="checkbox"
-              />
-            </span>
-            <span v-else>
-              {{ props.column.label }}
-            </span>
-          </template>
+        <div class="mx-6">
+          <vue-good-table
+            ref="tableRef"
+            :columns="columns"
+            :rows="items"
+            v-model:selected-rows="selectedEntity"
+            styleClass="vgt-table centered lesspadding2 table-head"
+            :pagination-options="{
+              enabled: true,
+              perPage: perpage,
+              perPageDropdown: [10, 20, 50, 100],
+            }"
+            :sort-options="{
+              enabled: true,
+            }"
+            :select-options="{
+              enabled: false,
+              selectOnCheckboxOnly: false, // Permite clicar na linha também
+              selectionInfoClass: 'hidden', // Oculta o painel padrão
+              selectionText: t('rows selected'),
+              clearSelectionText: t('clear'),
+              disableSelectInfo: true, // Desabilita o painel padrão
+              selectAllByGroup: false,
+            }"
+            mode="remote"
+            @on-selected-rows-change="onSelectionChange"
+            @on-row-click="onRowClick"
+          >
+            <!-- Coluna de checkbox -->
+            <template #table-column="props">
+              <span v-if="props.column.field === 'checkbox'">
+                <input
+                  v-show="0"
+                  type="checkbox"
+                  :checked="isAllSelected"
+                  @change="toggleSelectAll"
+                  class="checkbox"
+                />
+              </span>
+              <span v-else>
+                {{ props.column.label }}
+              </span>
+            </template>
 
-          <!-- Coluna de ações -->
-          <template #table-row="props">
-            <div
-              v-if="props.column.field === 'actions'"
-              class="flex items-center gap-2"
-            >
-              <Button
-                @click="startEditing(props.row)"
-                btnClass="btn-icon btn-outline-primary btn-sm"
-                :text="t('Edit')"
-                :is-disabled="props.row.code == 'ADMIN'"
+            <!-- Coluna de ações -->
+            <template #table-row="props">
+              <div
+                v-if="props.column.field === 'actions'"
+                class="flex items-center gap-2"
               >
-                <Icon icon="heroicons:pencil-square" />
-              </Button>
+                <Button
+                  @click="startEditing(props.row, true)"
+                  btnClass="btn-icon btn-outline-secondary btn-sm"
+                  :text="t('View')"
+                  :is-disabled="props.row.code == 'ADMIN'"
+                >
+                  <Icon icon="heroicons:eye" />
+                </Button>
 
-              <Button
-                @click="deleteRow(props.row)"
-                btnClass="btn-icon btn-outline-danger btn-sm"
-                :text="t('Delete')"
-                :is-disabled="props.row.code == 'ADMIN'"
+                <Button
+                  @click="startEditing(props.row)"
+                  btnClass="btn-icon btn-outline-primary btn-sm"
+                  :text="t('Edit')"
+                  :is-disabled="props.row.code == 'ADMIN'"
+                >
+                  <Icon icon="heroicons:pencil-square" />
+                </Button>
+
+                <Button
+                  @click="deleteRow(props.row)"
+                  btnClass="btn-icon btn-outline-danger btn-sm"
+                  :text="t('Delete')"
+                  :is-disabled="props.row.code == 'ADMIN'"
+                >
+                  <Icon icon="heroicons:trash" />
+                </Button>
+              </div>
+              <div
+                v-if="props.column.field === 'status'"
+                class="flex items-center gap-2"
               >
-                <Icon icon="heroicons:trash" />
-              </Button>
-            </div>
+                <Badge
+                  :label="t(props.row.status)"
+                  :badgeClass="
+                    props.row.status == 'PENDING'
+                      ? 'bg-gray-500 text-white'
+                      : props.row.status == 'COMPLETED'
+                      ? 'bg-success-500 text-white'
+                      : 'bg-warning-500 text-white'
+                  "
+                />
+                <Button
+                  @click="startEditingStatus(props.row)"
+                  btnClass="btn-icon btn-outline-primary btn-sm w-2"
+                  :text="t('Edit')"
+                  :is-disabled="props.row.code == 'ADMIN'"
+                >
+                  <Icon icon="heroicons:arrow-path" />
+                </Button>
+              </div>
 
-            <!-- Checkbox na primeira coluna -->
-            <div
-              v-else-if="props.column.field === 'checkbox'"
-              class="flex justify-center"
-            >
-              <input
-                type="checkbox"
-                :checked="isSelected(props.row)"
-                @change="toggleRowSelection(props.row)"
-                @click.stop
-                class="checkbox"
-              />
-            </div>
+              <!-- Checkbox na primeira coluna -->
+              <div
+                v-else-if="props.column.field === 'checkbox'"
+                class="flex justify-center"
+              >
+                <input
+                  type="checkbox"
+                  :checked="isSelected(props.row)"
+                  @change="toggleRowSelection(props.row)"
+                  @click.stop
+                  class="checkbox"
+                />
+              </div>
 
-            <!-- Outras colunas -->
-            <span v-else>
-              {{ props.formattedRow[props.column.field] }}
-            </span>
-          </template>
+              <!-- Outras colunas -->
+              <span v-else>
+                {{ props.formattedRow[props.column.field] }}
+              </span>
+            </template>
 
-          <template #pagination-bottom="props">
-            <div class="flex justify-center px-3 py-4">
-              <slot></slot>
-            </div>
-          </template>
-        </vue-good-table>
+            <template #pagination-bottom="props">
+              <div class="flex justify-center px-3 py-4">
+                <slot></slot>
+              </div>
+            </template>
+          </vue-good-table>
+        </div>
       </div>
     </Card>
     <editForm
@@ -183,6 +217,15 @@
       @clearSelection="clearSelection"
       :selectedEntity="selectedEntity[0]"
       @close="emit('close')"
+      :viewForm="viewForm"
+      v-if="props.isEditing && !openEditForm"
+    />
+    <statusForm
+      @refetch="emit('refetch')"
+      @clearSelection="clearSelection"
+      :selectedEntity="selectedEntity[0]"
+      @close="close"
+      :openEditForm="openEditForm"
       v-if="props.isEditing"
     />
   </div>
@@ -197,7 +240,9 @@ import { useI18n } from "vue-i18n";
 import TableSkeleton from "@/components/Skeleton/Table.vue";
 import addForm from "./addForm.vue";
 import editForm from "./editForm.vue";
+import statusForm from "./statusForm.vue";
 import { formateDatePT } from "@/utils/formatters";
+import Badge from "@/components/Badge";
 
 const props = defineProps({
   items: Array,
@@ -221,6 +266,7 @@ const { t } = useI18n();
 const tableRef = ref(null);
 const selectedEntity = ref([]);
 const isMobile = ref(false);
+const viewForm = ref(false);
 const openEditForm = ref(false);
 const perpage = ref(10);
 const searchTerm = ref("");
@@ -245,11 +291,11 @@ const columns = ref([
   },
 
   {
-    label: t("Endereco"),
+    label: t("Endereço"),
     field: "deliveryAddress",
   },
   {
-    label: t("Descricao do pedido"),
+    label: t("Descrição do pedido"),
     field: "deliveryNotes",
   },
   {
@@ -258,7 +304,7 @@ const columns = ref([
     sortable: true,
   },
   {
-    label: t("actions"),
+    label: t("Acções"),
     field: "actions",
     sortable: false,
     width: "120px",
@@ -282,6 +328,10 @@ const onRowClick = (params) => {
   if (!params.column.field === "checkbox") {
     toggleRowSelection(params.row);
   }
+};
+const close = () => {
+  openEditForm.value = false;
+  emit("close");
 };
 
 const toggleRowSelection = (row) => {
@@ -333,8 +383,14 @@ const handleDeleteSelected = () => {
   }
 };
 
-const startEditing = (row) => {
+const startEditing = (row, view = false) => {
+  viewForm.value = view;
   selectedEntity.value[0] = row;
+  emit("startEditing", row);
+};
+const startEditingStatus = (row) => {
+  selectedEntity.value[0] = row;
+  openEditForm.value = true;
   emit("startEditing", row);
 };
 

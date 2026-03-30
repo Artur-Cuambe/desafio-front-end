@@ -42,14 +42,15 @@
               prependIcon="heroicons-outline:document-text"
               merged
             />
-            <InputGroup
-              v-model.trim="entityForm.gender"
-              :error="entityForm.phoneNumberError"
-              type="text"
-              :placeholder="$t('Genero')"
-              prependIcon="heroicons-outline:document-text"
-              merged
-            />
+            <vSelect
+              class="dark:text-black-500 dark:bg-black-300"
+              v-model="entityForm.gender"
+              :reduce="(per) => per.value"
+              :options="genderData"
+              placeholder="Selecionar gênero "
+              :error="entityForm.genderError"
+            >
+            </vSelect>
 
             <InputGroup
               hidden
@@ -93,8 +94,11 @@ import InputGroup from "@/components/InputGroup/index.vue";
 import { onMounted, ref } from "vue";
 import Button from "@/components/Button/index.vue";
 import { UseForm } from "../composables/useForm";
-import { CreateCustomerDto, CreateDepartmentDto, CreateEntityDto } from "@/api";
+import { CreateCustomerDto } from "@/api";
 import { useCRUD } from "../composables/useCRUD";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+import { computed } from "vue";
 
 defineProps({});
 
@@ -113,6 +117,19 @@ const open = () => {
 const close = () => {
   openModal.value = false;
 };
+
+const gender = [
+  { label: "Masculino", value: "MALE" },
+  { label: "Feminino", value: "FEMALE" },
+];
+
+const genderData = computed(() => {
+  return gender?.map((item) => {
+    return {
+      ...item,
+    };
+  });
+});
 
 const onSubmit = handleSubmit(async () => {
   const data: CreateCustomerDto = {

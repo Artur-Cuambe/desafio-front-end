@@ -39,7 +39,7 @@
           "
         >
           <img
-            src="@/assets/images/logo/logo.svg"
+            src="@/assets/images/logo/images.jpeg"
             alt=""
             v-if="
               !this.$store.themeSettingsStore.isDark &&
@@ -48,7 +48,7 @@
           />
 
           <img
-            src="@/assets/images/logo/logo-white.svg"
+            src="@/assets/images/logo/images_dark.jpeg"
             alt=""
             v-if="
               this.$store.themeSettingsStore.isDark ||
@@ -64,7 +64,7 @@
           "
         >
           <img
-            src="@/assets/images/logo/logo-c.svg"
+            src="@/assets/images/logo/images.jpeg"
             alt=""
             v-if="
               !this.$store.themeSettingsStore.isDark &&

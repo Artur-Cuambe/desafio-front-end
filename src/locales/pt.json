@@ -363,6 +363,13 @@
   "Select all":"Selecionar todos",
   "Deselect all":"Deselecionar todos",
   "Selected":"Selecionado",
-  "Delete selected":"Eliminar selecionado"
+  "Delete selected":"Eliminar selecionado",
+  "list-order":"Pedidos",
+  "list-customer":"Clientes",
+  "PENDING":"Pendente",
+  "IN_PROGRESS":"Em trânsito",
+  "COMPLETED":"Entregue",
+  "MALE":"Masculino",
+  "FEMALE":"Feminino"
 
 }

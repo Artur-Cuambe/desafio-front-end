@@ -14,6 +14,7 @@
               <InputGroup
                 v-model.trim="entityForm.firstName"
                 :error="entityForm.firstNameError"
+                :disabled="viewForm"
                 type="text"
                 :placeholder="$t('Nome')"
                 prependIcon="heroicons-outline:office-building"
@@ -24,6 +25,7 @@
                 v-model.trim="entityForm.lastName"
                 :error="entityForm.lastNameError"
                 type="text"
+                :disabled="viewForm"
                 :placeholder="$t('Apelido')"
                 prependIcon="heroicons-outline:office-building"
                 merged
@@ -33,18 +35,21 @@
                 v-model.trim="entityForm.phoneNumber"
                 :error="entityForm.phoneNumberError"
                 type="text"
+                :disabled="viewForm"
                 :placeholder="$t('Telefone')"
                 prependIcon="heroicons-outline:document-text"
                 merged
               />
-              <InputGroup
-                v-model.trim="entityForm.gender"
-                :error="entityForm.phoneNumberError"
-                type="text"
-                :placeholder="$t('Genero')"
-                prependIcon="heroicons-outline:document-text"
-                merged
-              />
+
+              <vSelect
+                class="dark:text-black-500 dark:bg-black-300"
+                v-model="entityForm.gender"
+                :reduce="(per) => per.value"
+                :options="genderData"
+                :disabled="viewForm"
+                :error="entityForm.genderError"
+              >
+              </vSelect>
 
               <InputGroup
                 hidden
@@ -65,6 +70,7 @@
                   {{ $t("cancel") }}
                 </Button>
                 <Button
+                  v-if="!viewForm"
                   text="dark"
                   btnClass="btn-primary"
                   type="submit"
@@ -90,8 +96,14 @@ import Button from "@/components/Button/index.vue";
 import { UseForm } from "../composables/useForm";
 import { UpdateCustomerDto } from "@/api";
 import { useCRUD } from "../composables/useCRUD";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+import { computed } from "vue";
 
-const { selectedEntity } = defineProps({ selectedEntity: Object });
+const { selectedEntity, viewForm } = defineProps({
+  selectedEntity: Object,
+  viewForm: Boolean,
+});
 
 const emit = defineEmits(["refetch", "close", "clearSelection"]);
 
@@ -105,6 +117,19 @@ const close = () => {
   emit("clearSelection");
   emit("close");
 };
+
+const gender = [
+  { label: "Masculino", value: "MALE" },
+  { label: "Feminino", value: "FEMALE" },
+];
+
+const genderData = computed(() => {
+  return gender?.map((item) => {
+    return {
+      ...item,
+    };
+  });
+});
 
 const onSubmit = handleSubmit(async () => {
   const data: UpdateCustomerDto = {
